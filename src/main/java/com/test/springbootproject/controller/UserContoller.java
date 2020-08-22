@@ -20,18 +20,17 @@ import com.test.springbootproject.service.UserService;
 
 @RestController
 public class UserContoller {
-	
+
 	@Autowired
 	UserService userService;
-	
+
 	@GetMapping("/home")
-	public ResponseEntity<String> helloWorld(){
+	public ResponseEntity<String> helloWorld() {
 		return ResponseEntity.ok("Hello World");
 	}
-	
+
 	@GetMapping("/user/{id}")
-	public ResponseEntity<User> getUserById(@PathVariable("id") int id){
-		
+	public ResponseEntity<User> getUserById(@PathVariable("id") int id) {
 		try {
 			User user = userService.getUserById(id);
 			return ResponseEntity.ok(user);
@@ -39,47 +38,40 @@ public class UserContoller {
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
+
 	@GetMapping("/user")
-	public ResponseEntity<User> getUserByIdParam(@RequestParam int id){
+	public ResponseEntity<User> getUserByIdParam(@RequestParam int id) {
 		return getUserById(id);
 	}
-	
+
 	@GetMapping("/user/name")
-	public ResponseEntity<List<User>> getUserByName(@RequestParam String name){
+	public ResponseEntity<List<User>> getUserByName(@RequestParam String name) {
 		return ResponseEntity.ok(userService.getUsersByName(name));
 	}
-	
+
 	@PostMapping("/user")
 	public ResponseEntity<UserRequest> createUser(@RequestBody UserRequest userRequest) {
 		User user = userService.saveUser(userRequest.toUser());
 		return ResponseEntity.ok(UserRequest.fromUser(user));
-		
+
 	}
-	
+
 	@PutMapping("/user/{id}")
-	public ResponseEntity<UserRequest> updateUser(@RequestBody UserRequest userRequest, @PathVariable int id){
-		
+	public ResponseEntity<UserRequest> updateUser(@RequestBody UserRequest userRequest, @PathVariable int id) {
 		User user = userRequest.toUser();
 		user.setId(id);
 		userService.updateUser(user);
-		
+
 		return ResponseEntity.ok(UserRequest.fromUser(user));
 	}
-	
+
 	@DeleteMapping("/user/{id}")
-	public ResponseEntity<Void> deleteUser(@PathVariable int id){
-		
+	public ResponseEntity<Void> deleteUser(@PathVariable int id) {
 		try {
 			userService.deleteUser(id);
 			return ResponseEntity.noContent().build();
 		} catch (NotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}
-		
 	}
-	
-	
-	
-	
 }
