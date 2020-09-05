@@ -30,17 +30,13 @@ public class UserContoller {
 	}
 
 	@GetMapping("/user/{id}")
-	public ResponseEntity<User> getUserById(@PathVariable("id") int id) {
-		try {
+	public ResponseEntity<User> getUserById(@PathVariable("id") int id) throws NotFoundException {
 			User user = userService.getUserById(id);
 			return ResponseEntity.ok(user);
-		} catch (NotFoundException e) {
-			return ResponseEntity.notFound().build();
-		}
 	}
 
 	@GetMapping("/user")
-	public ResponseEntity<User> getUserByIdParam(@RequestParam int id) {
+	public ResponseEntity<User> getUserByIdParam(@RequestParam int id) throws NotFoundException {
 		return getUserById(id);
 	}
 
@@ -66,12 +62,8 @@ public class UserContoller {
 	}
 
 	@DeleteMapping("/user/{id}")
-	public ResponseEntity<Void> deleteUser(@PathVariable int id) {
-		try {
+	public ResponseEntity<Void> deleteUser(@PathVariable int id) throws NotFoundException {
 			userService.deleteUser(id);
 			return ResponseEntity.noContent().build();
-		} catch (NotFoundException e) {
-			return ResponseEntity.notFound().build();
-		}
 	}
 }
